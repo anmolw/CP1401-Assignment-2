@@ -34,7 +34,7 @@ def list_moves():
     # For every element in MOVES
     for i in range(0, 6):
         # Print the name of the move and the move number
-        print("(" + str(i + 1) + ") " + MOVES[i][0])  # Uses a type conversion to avoid the added spaces
+        print("(" + str(i + 1) + ") " + MOVES[i][0])  # Uses a type conversion to avoid added spaces
 
 
 def input_move():
@@ -53,9 +53,10 @@ def play():
     computer_move = random.randint(1, 6)
     print("You chose:", get_move_name(user_move))
     print("The computer chose:", get_move_name(computer_move))
-    # Do a simple comparison to check for a tie
+    # Perform a simple comparison to check for a tie
     if user_move == computer_move:
         print(TIEMESSAGE)
+    # Check for win condition
     elif MOVES[user_move - 1][1][computer_move - 1] == 1:
         print(WINMESSAGE)
     else:
@@ -63,15 +64,16 @@ def play():
 
 
 if __name__ == "__main__":
-    print("Welcome message")
+    print("Welcome to Ultimate Ninja Battle Combat!")
     user_name = input_name()
     print("Welcome, " + user_name)
     user_input = ""
+    # Loop until the user chooses to quit
     while user_input != "Q":
         # Display a prompt, accept the user's input and convert it to upper case
         user_input = str(input("(I)nstructions\n(P)lay\n(Q)uit\nEnter your selection: ")).upper()
         if user_input == "I":
-            print("Welcome to Ultimate Ninja Battle Combat!!!")
+            print("Welcome to Ultimate Ninja Battle Combat!")
             print("You will be fighting against the computer, and the winner gets bragging rights.")
             print("For each turn you will be asked to use one of the 6 attacks below.")
             list_moves()
