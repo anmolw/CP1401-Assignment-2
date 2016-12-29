@@ -34,7 +34,7 @@ def list_moves():
     # For every element in MOVES
     for i in range(0, 6):
         # Print the name of the move and the move number
-        print("(" + str(i + 1) + ") " + MOVES[i][0])  # Uses a type conversion to avoid added spaces
+        print("(", i + 1, ") ", MOVES[i][0], sep="")
 
 
 def input_move():
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     print("Welcome to Ultimate Ninja Battle Combat!")
     user_name = input_name()
     print("Welcome, " + user_name)
-    user_input = ""
+    user_input = None
     # Loop until the user chooses to quit
     while user_input != "Q":
         # Display a prompt, accept the user's input and convert it to upper case
