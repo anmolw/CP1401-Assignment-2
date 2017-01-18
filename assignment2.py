@@ -18,11 +18,29 @@ LOSEMESSAGE = "Unfortunately, you have been defeated"
 
 
 def input_name():
+    '''
+    Prompts the user to enter their name.
+    '''
     name = input("Enter your name: ")
     return name
 
 
+def place_bet(balance):
+    '''
+    Let the user place a bet that is a multiple of 5 and less than or equal to
+    their balance.
+    '''
+    bet = int(input("Please enter the amount to bet. All bets must be multiples of 5\nYou choose to bet $"))
+    while bet % 5 != 0 or bet > balance:
+        print("That is not a valid amount. Your bet must be a multiple of 5, and be within your means.")
+        bet = int(input("Please enter the amount to bet. All bets must be multiples of 5\nYou choose to bet $"))
+    return bet
+
+
 def get_move_name(move_number):
+    '''
+    Return the name of a move, given its number
+    '''
     # Check to make sure we're not out of bounds
     if 1 <= move_number <= 6:
         return MOVES[move_number - 1][0]
@@ -31,13 +49,19 @@ def get_move_name(move_number):
 
 
 def list_moves():
+    '''
+    Loop through the moves array and print the name of each move
+    '''
     # For every element in MOVES
     for i in range(0, 6):
         # Print the name of the move and the move number
-        print("(", i + 1, ") ", MOVES[i][0], sep="")
+        print("({0}) {1}".format(i + 1, MOVES[i][0]))
 
 
 def input_move():
+    '''
+    Prompt the user to pick a move from the list
+    '''
     user_input = 0
     print("Pick a move.")
     list_moves()
@@ -48,6 +72,10 @@ def input_move():
 
 
 def play():
+    '''
+    Main game function. Lets the user pick a move, and randomly chooses a
+    computer move. Evaluates the result of the game.
+    '''
     user_move = input_move()
     # Generate a random number between 1 and 6
     computer_move = random.randint(1, 6)
@@ -56,30 +84,59 @@ def play():
     # Perform a simple comparison to check for a tie
     if user_move == computer_move:
         print(TIEMESSAGE)
+        return 2
     # Check for win condition
     elif MOVES[user_move - 1][1][computer_move - 1] == 1:
         print(WINMESSAGE)
+        return 1
     else:
         print(LOSEMESSAGE)
+        return 0
 
 
-if __name__ == "__main__":
+def main():
+    # Create an empty list
+    balance_history = list()
+    # Starting balance is $100
+    balance = 100
     print("Welcome to Ultimate Ninja Battle Combat!")
     user_name = input_name()
     print("Welcome, " + user_name)
     user_input = None
     # Loop until the user chooses to quit
     while user_input != "Q":
+        print("Your current balance is ${}".format(balance))
         # Display a prompt, accept the user's input and convert it to upper case
-        user_input = str(input("(I)nstructions\n(P)lay\n(Q)uit\nEnter your selection: ")).upper()
+        user_input = str(input("Please choose from the following menu:\n(I)nstructions\n(P)lay\n(Q)uit\nEnter your selection: ")).upper()
         if user_input == "I":
             print("Welcome to Ultimate Ninja Battle Combat!")
             print("You will be fighting against the computer, and the winner gets bragging rights.")
             print("For each turn you will be asked to use one of the 6 attacks below.")
             list_moves()
         elif user_input == "P":
-            play()
+            # Quit if the user has 0 balance
+            if balance == 0:
+                break
+            bet = place_bet(balance)
+            result = play()
+            if result == 0:
+                # If the user lost
+                balance -= bet
+            elif result == 1:
+                # If the user won
+                balance += bet
+            balance_history.append(balance)
+
         elif user_input != "Q":
             print("Invalid input. Please try again.")
 
-    print("Thank you for playing Ultimate Ninja Battle Combat!")
+    print("Goodbye {}. Your final balance is ${}".format(user_name, balance))
+    print("Your balance history is:")
+    print("Starting balance: $100")
+    if balance_history:
+        # Only print the per-round balance history if the user has actually played a round
+        for i in range(0, len(balance_history)):
+            print("After round {}: ${}".format(i+1, balance_history[i]))
+
+
+main()
