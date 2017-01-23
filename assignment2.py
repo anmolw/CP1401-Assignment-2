@@ -30,10 +30,18 @@ def place_bet(balance):
     Let the user place a bet that is a multiple of 5 and less than or equal to
     their balance.
     '''
-    bet = int(input("Please enter the amount to bet. All bets must be multiples of 5\nYou choose to bet $"))
-    while bet % 5 != 0 or bet > balance:
-        print("That is not a valid amount. Your bet must be a multiple of 5, and be within your means.")
-        bet = int(input("Please enter the amount to bet. All bets must be multiples of 5\nYou choose to bet $"))
+    bet = 0
+    error_flag = False
+    while bet % 5 != 0 or bet > balance or bet <= 0:
+        if error_flag:
+            print("That is not a valid amount. Your bet must be a multiple of 5, and be within your means.")
+        # Use a try/except block to prevent crashes
+        try:
+            bet = int(input("Please enter the amount to bet. All bets must be multiples of 5\nYou choose to bet $"))
+        except ValueError:
+            pass
+        # Set the error flag to true to indicate that the loop has run more than once. I.e. an invalid value was entered
+        error_flag = True
     return bet
 
 
@@ -65,9 +73,18 @@ def input_move():
     user_input = 0
     print("Pick a move.")
     list_moves()
+    error_flag = False
     # Loop until the user enters a valid choice
     while not 1 <= user_input <= 6:
-        user_input = int(input("Enter your selection: "))
+        if error_flag:
+            print("That is not a valid selection. Please enter a number between 1-6.")
+        # Use a try/except block to prevent crashes
+        try:
+            user_input = int(input("Enter your selection: "))
+        except ValueError:
+            pass
+        # Set the error flag to true to indicate that the loop has run more than once. I.e. an invalid value was entered
+        error_flag = True
     return user_input
 
 
@@ -95,6 +112,9 @@ def play():
 
 
 def main():
+    '''
+    Main program function.
+    '''
     # Create an empty list
     balance_history = list()
     # Starting balance is $100
