@@ -12,9 +12,9 @@ MOVES = [['Punch of Fury', [-1, 0, 0, 1, 1, 0]],
          ['Nunchucks of Anger', [0, 0, 1, 1, -1, 0]],
          ['Knife of Freedom', [1, 1, 0, 0, 1, -1]]]
 
-WINMESSAGE = "Congratulations! You won!"
+WINMESSAGE = "Congratulations, {}. You won!"
 TIEMESSAGE = "You tied with the computer!"
-LOSEMESSAGE = "Unfortunately, you have been defeated"
+LOSEMESSAGE = "Unfortunately {}, you have been defeated"
 
 
 def input_name():
@@ -100,14 +100,11 @@ def play():
     print("The computer chose:", get_move_name(computer_move))
     # Perform a simple comparison to check for a tie
     if user_move == computer_move:
-        print(TIEMESSAGE)
         return 2
     # Check for win condition
     elif MOVES[user_move - 1][1][computer_move - 1] == 1:
-        print(WINMESSAGE)
         return 1
     else:
-        print(LOSEMESSAGE)
         return 0
 
 
@@ -116,7 +113,7 @@ def main():
     Main program function.
     '''
     # Create an empty list
-    balance_history = list()
+    balance_history = []
     # Starting balance is $100
     balance = 100
     print("Welcome to Ultimate Ninja Battle Combat!")
@@ -141,10 +138,16 @@ def main():
             result = play()
             if result == 0:
                 # If the user lost
+                print(LOSEMESSAGE.format(user_name))
                 balance -= bet
             elif result == 1:
                 # If the user won
+                print(WINMESSAGE.format(user_name))
                 balance += bet
+            else:
+                # If the user drew
+                print(TIEMESSAGE)
+
             balance_history.append(balance)
 
         elif user_input != "Q":
